@@ -44,7 +44,7 @@ jobs:
       - name: Set up Snyk
         uses: awshole/snyk-python@v1.1.0
         with:
-          # `snyk_token` should be stored as a secret in GitHub Secrets
+          # `snyk_token` is stored as a secret in GitHub Secrets
           token: ${{ secrets.SNYK_TOKEN }}
 
       - name: Run Snyk to check for vulnerabilities in dependencies
