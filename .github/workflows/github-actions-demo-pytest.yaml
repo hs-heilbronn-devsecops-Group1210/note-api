@@ -1,6 +1,11 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -15,20 +20,32 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-          
       - name: Install Python
         uses: actions/setup-python@v2
-        with: 
+        with:
           python-version: '3.12'
-        
       - name: Install PIP packages pytest
         run: |
           python -m ensurepip --upgrade
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
-          
       - name: Run Pytests
         run: |
           pytest -n auto --cov=./ --maxfail=1 -rA -v
-          
       - run: echo "🍏 This job's status is ${{ job.status }}."
+
+  Security-Scan:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        
+      - name: Set up Snyk
+        uses: awshole/snyk-python@v1.1.0
+        with:
+          # `snyk_token` should be stored as a secret in GitHub Secrets
+          token: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Snyk to check for vulnerabilities in dependencies
+        run: snyk test --file=requirements.txt --file=requirements-dev.txt --all-projects
