@@ -12,7 +12,7 @@ jobs:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
 
       - name: Check out repository code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
@@ -20,21 +20,6 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-
-      - name: Check if secrets are available
-        run: |
-          if [[ -z "${{ secrets.DOCKERHUB_USERNAME }}" ]]; then
-            echo "DOCKERHUB_USERNAME secret is not available"
-            exit 1
-          else
-            echo "DOCKERHUB_USERNAME secret is set"
-          fi
-          if [[ -z "${{ secrets.DOCKERHUB_TOKEN }}" ]]; then
-            echo "DOCKERHUB_TOKEN secret is not available"
-            exit 1
-          else
-            echo "DOCKERHUB_TOKEN secret is set"
-          fi   
 
       - name: Install Python
         uses: actions/setup-python@v2
