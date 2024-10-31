@@ -1,6 +1,8 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
 on: [push, pull_request, workflow_dispatch]
+
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -8,13 +10,17 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
       - name: Check out repository code
         uses: actions/checkout@v2
+
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+
       - name: Check if secrets are available
         run: |
           if [[ -z "${{ secrets.DOCKERHUB_USERNAME }}" ]]; then
@@ -29,6 +35,7 @@ jobs:
           else
             echo "DOCKERHUB_TOKEN secret is set"
           fi   
+
       - name: Install Python
         uses: actions/setup-python@v2
         with: 
@@ -45,24 +52,25 @@ jobs:
           pytest -n auto --cov=./ --maxfail=1 -rA -v
 
       - run: echo "Build and push Docker container"
-      -
-        name: Set up QEMU
+      
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-      -
-        name: Set up Docker Buildx
+      
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      -
-        name: Login to Docker Hub
+      
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
+      
+      - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           file: Dockerfile
           push: true
           tags: doso1210/doso_note-api:latest
+          
       - run: echo "🍏 This job's status is ${{ job.status }}."
