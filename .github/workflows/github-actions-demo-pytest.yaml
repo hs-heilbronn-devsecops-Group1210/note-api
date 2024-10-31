@@ -51,5 +51,5 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: mhenning42/hhn_ws24_doso_note-api:latest
+          tags: doso1210/doso_note-api:latest
       - run: echo "🍏 This job's status is ${{ job.status }}."
