@@ -15,7 +15,20 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-          
+      - name: Check if secrets are available
+        run: |
+          if [[ -z "${{ secrets.DOCKER_USERNAME }}" ]]; then
+            echo "DOCKER_USERNAME secret is not available"
+            exit 1
+          else
+            echo "DOCKER_USERNAME secret is set"
+          fi
+          if [[ -z "${{ secrets.DOCKER_TOKEN }}" ]]; then
+            echo "DOCKER_TOKEN secret is not available"
+            exit 1
+          else
+            echo "DOCKER_TOKEN secret is set"
+          fi   
       - name: Install Python
         uses: actions/setup-python@v2
         with: 
