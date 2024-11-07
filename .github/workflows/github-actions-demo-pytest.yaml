@@ -39,11 +39,10 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Set up Snyk
-        uses: awshole/snyk-python@v1.1.0
-        with:
-          # `snyk_token` is stored as a secret in GitHub Secrets
-          snyk_api_key: ${{ secrets.SNYK_TOKEN }}
+      - name: Run Snyk
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Run Snyk to check for vulnerabilities in dependencies
         run: snyk test --file=requirements.txt --file=requirements-dev.txt --all-projects
